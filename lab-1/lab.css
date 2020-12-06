@@ -1,0 +1,34 @@
+* {
+    font-family: 'Kanit', sans-serif;
+}
+body {
+    background: skyblue;
+    text-align: center;
+}
+#app {
+    width: 60vw;
+    background: hsla(0, 50%, 100%, .5);
+    position: relative;
+    margin: auto;
+    padding: 30px;
+    border-radius: 15px;
+}
+input {
+    width: 10vw;
+    height: 25px;
+    text-align: center;
+    border-radius: 15px;
+}
+
+.calculate {
+    background: hsla(0, 50%, 0%, .2);
+    margin: 10px;
+    padding: 10px;
+    border-radius: 15px;
+}
+.result {
+    background: hsla(200, 50%, 50%, .5);
+    margin: 10px;
+    padding: 10px;
+    border-radius: 15px;
+}

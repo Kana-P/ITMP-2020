@@ -10,49 +10,75 @@
 	<div id="canvas">
 		<section id="canvas_header">
 			<div>
-				เหลือเวลา 10 วินาที
+				เหลือเวลา {{time}} วินาที
 			</div>
 		</section>
 		<section id="canvas_main">
 			<main>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot style="--l:80%"></a-dot>
-				<a-dot data-pick="true"></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
+				<a-dot v-for="i in row*row" :style="{
+					'--row':row,
+					'--h':h,
+					'--l':l+'%',
+				}" :data-pick="i == pick" @click="check(i==pick)"></a-dot>
 			</main>
 		</section>
 		<section id="canvas_footer">
 			<div>
-				0 คะแนน
+				{{score}} คะแนน
 			</div>
 		</section>
 	</div>
 
 	<script>
 		let picklight = "20%" //เลือกว่ารอบนี้ อันพิเศษจะมีความสว่าง 20%
-		document.registerElement('a-dot') //ให้ vue รู้จัก a-dot
+		// document.registerElement('a-dot') //ให้ vue รู้จัก a-dot
 
 		function rand(start,stop){//สร้างฟังก์ชัน random ไว้ใช้
-			let shift = (stop-start)+1
-			return Math.floor(Math.random()*100%shift)+start
+			let shift = (stop - start) + 1
+			return Math.floor(Math.random() * 100 % shift) + start
 		}
 
 		let app = new Vue({
 			el:'#canvas',
 			data:{
-				row:2, //จำนวนแถวที่จะมีในรอบนี้
-				h:330, // hue ในรอบนี้
-				time:10, //เวลาเริ่มต้น
-				score:0, //คะแนนเริ่มต้น
-				pick:1, //หมายเลขวงกลมที่จะสีแตกต่างจากก้อนอื่นๆ
-				l:30,//ความสว่างของสีทั่วไปในรอบนี้
+				row: 2, //จำนวนแถวที่จะมีในรอบนี้
+				h: 330, // hue ในรอบนี้
+				time: 60, //เวลาเริ่มต้น
+				score: 0, //คะแนนเริ่มต้น
+				pick: 1, //หมายเลขวงกลมที่จะสีแตกต่างจากก้อนอื่นๆ
+				l: 30,//ความสว่างของสีทั่วไปในรอบนี้
+				level: 0 //เลเวลที่ผ่าน
 			},
 			methods: {
+				check: function (e) {
+					console.log(e)	
+					if (this.time > 0) {
+						if (e == true) {
+							this.correct()
+						} if (e == false) {
+							this.incorrect()
+						}
+					} if (this.score < 0) {
+						this.score = 0
+					} if (this.time < 0) {
+						this.time = 0
+					}
+				},
+				correct: function () {
+					this.level++
+					if (this.level % 5 === 0 && this.row < 10){
+						this.row++
+					}
+					// this.row = rand(2, 8)
+					this.pick = rand(1, this.row * this.row)
+					this.h = rand(10, 300)
+					this.l = rand(10, 35)
+					this.score++
+				},
+				incorrect: function () {
+					this.score--
+					this.time -= 5
+				}
 
 			}
 		})

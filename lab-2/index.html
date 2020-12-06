@@ -1,38 +1,107 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>The Members - ITKMITL Multimedia Programming 2563</title>
+  <head>
+    <title>The Members - ITKMITL Multimedia Programming 2563</title>
 
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<link rel="stylesheet" type="text/css" href="lab.css">
-</head>
-<body>
-	<div id="app">
-		
-	</div>
-	
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="lab.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <div class="leftbox">
+        <div class="info">
+          <h2 class="center">About</h2>
+          <h3>Username: {{person.username}}</h3>
+          <h3>Name: {{person.name}}</h3>
+          <h3>email: {{person.email}}</h3>
+          <h3>website: {{person.website}}</h3>
+          <h3>company: {{person.company.name}}</h3>
+        </div>
+        <div class="info check">
+          <button @click="isthisgood">เขาเป็นสมาชิกกลุ่มที่ดีหรือไม่</button>
+          <h2 class="center">{{yesno.answer}}</h2>
+          <img :src="yesno.image" alt="" />
+        </div>
+      </div>
+      <div class="rightbox center">
+        <h2>Users</h2>
+        <div class="wrapper">
+          <div
+            class="item"
+            v-for="u in users"
+            :data-id="u.id"
+            @click="viewBio(u)"
+          >
+            <h2>{{u.username}}</h2>
+            <img :src="`https://picsum.photos/id/1${u.id}/200/200`" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
 
-	<script>
-		fetch('https://jsonplaceholder.typicode.com/users')
-		.then(response => response.json())
-		.then(json => {console.log(json)})
-		let app = new Vue({
-			el: '#app',
-			data: {
-				users :[],
-				person:{
-					id:0,
-					name:'..loading',
-					username:'..loading',
-					email:'..loading',
-					website:'..loading',
-					company:{
-						name : '..loading',
-					}
-				}	
-			}
-		})
-
-	</script>
-</body>
+    <script>
+      fetch("https://jsonplaceholder.typicode.com/users")
+        .then((response) => response.json())
+        .then((json) => {
+          console.log(json);
+          app.users = json;
+          app.person = json[0];
+        });
+      let app = new Vue({
+        el: "#app",
+        methods: {
+          viewBio: function (user) {
+            this.person = user;
+            this.yesno.answer = "อยากรู้ คลิกเลย";
+            this.yesno.image = "";
+          },
+          isthisgood: function () {
+            fetch("https://yesno.wtf/api")
+              .then((response) => response.json())
+              .then((json) => {
+                app.yesno = json;
+              });
+          },
+        },
+        data: {
+          yesno: {
+            answer: "อยากรู้ คลิกเลย",
+            forced: false,
+            image: "",
+          },
+          person: {
+            id: 1,
+            name: "__________",
+            username: "__________",
+            email: "__________",
+            website: "__________",
+            company: {
+              name: "__________",
+              catchPhrase: "Multi-layered client-server neural-net",
+              bs: "harness real-time e-markets",
+            },
+          },
+          users: [
+            {
+              id: 1,
+              name: "__________",
+              username: "__________",
+              email: "__________",
+              website: "__________",
+              company: {
+                name: "__________",
+                catchPhrase: "Multi-layered client-server neural-net",
+                bs: "harness real-time e-markets",
+              },
+            },
+          ],
+        },
+      });
+    </script>
+  </body>
 </html>
